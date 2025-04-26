@@ -1,0 +1,18 @@
+services:
+  search:
+    build:
+      dockerfile: dev.Dockerfile
+      context: .docker/php
+    volumes:
+      - .:/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  search-web:
+    extends: search
+    profiles:
+      - service
+    ports:
+      - 8090:8000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    entrypoint: ["php", "-S", "0.0.0.0:8000", "-t", "public"]

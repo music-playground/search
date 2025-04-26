@@ -3,18 +3,28 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:music-playground/amqp-transport.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:music-playground/contracts.git"
+        }
+    ],
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "music-playground/amqp-transport": "dev-main",
+        "music-playground/contracts": "dev-main",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.2.*",
         "symfony/runtime": "7.2.*",
         "symfony/yaml": "7.2.*"
-    },
-    "require-dev": {
     },
     "config": {
         "allow-plugins": {
