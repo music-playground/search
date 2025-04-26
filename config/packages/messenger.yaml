@@ -1,0 +1,14 @@
+framework:
+    messenger:
+        default_bus: handle.bus
+        buses:
+            handle.bus:
+                default_middleware: false
+                middleware:
+                    - 'handle_message'
+        transports:
+            amqp:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 0
+        routing:

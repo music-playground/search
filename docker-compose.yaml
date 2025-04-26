@@ -7,6 +7,8 @@ services:
       - .:/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      - search
   search-web:
     extends: search
     profiles:
@@ -16,3 +18,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     entrypoint: ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+networks:
+  search:
+    name: music-playground-search
+    external: true
