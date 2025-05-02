@@ -38,6 +38,6 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-ENV PHP_IDE_CONFIG "serverName=Docker"
+ENV PHP_IDE_CONFIG "serverName=Docker.search"
 ENV XDEBUG_MODE "debug"
-ENV XDEBUG_CONFIG "client_host=host.docker.internal client_port=9999"
+ENV XDEBUG_CONFIG "client_host=host.docker.internal client_port=9997"

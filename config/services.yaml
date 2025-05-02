@@ -11,3 +11,19 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Shared\Infrastructure\ElasticSearch\ClientFactory:
+        arguments:
+            - '%env(ELASTICSEARCH_HOSTS)%'
+
+    elasticsearch.client:
+        factory: ['@App\Shared\Infrastructure\ElasticSearch\ClientFactory', 'create']
+        class: Elastic\Elasticsearch\Client
+
+    App\Search\Infrastructure\Repository\ArtistRepository:
+        arguments:
+            $client: '@elasticsearch.client'
+
+    App\Search\Infrastructure\Repository\AlbumRepository:
+        arguments:
+            $client: '@elasticsearch.client'

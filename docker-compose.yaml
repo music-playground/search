@@ -1,4 +1,27 @@
 services:
+  elastic:
+    image: elasticsearch:8.18.0
+    profiles:
+      - service
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    networks:
+      - elastic
+  kibana:
+    image: kibana:8.18.0
+    profiles:
+      - service
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elastic:9200
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
   search:
     build:
       dockerfile: dev.Dockerfile
@@ -9,16 +32,17 @@ services:
       - "host.docker.internal:host-gateway"
     networks:
       - search
+      - elastic
   search-web:
     extends: search
     profiles:
       - service
     ports:
       - 8090:8000
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     entrypoint: ["php", "-S", "0.0.0.0:8000", "-t", "public"]
 networks:
+  elastic:
+    driver: bridge
   search:
     name: music-playground-search
     external: true
