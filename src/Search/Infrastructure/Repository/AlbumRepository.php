@@ -31,8 +31,6 @@ final readonly class AlbumRepository implements AlbumRepositoryInterface
                 'index' => $this->index,
                 'id' => $id
             ])->asArray();
-
-            return $this->mapping->fromArray($source);
         } catch (ClientResponseException $exception) {
             if ($exception->getCode() === 404) {
                 return null;
@@ -40,6 +38,8 @@ final readonly class AlbumRepository implements AlbumRepositoryInterface
 
             throw $exception;
         }
+
+        return $this->mapping->fromArray($source);
     }
 
     /**
@@ -88,6 +88,11 @@ final readonly class AlbumRepository implements AlbumRepositoryInterface
         $this->client->bulk($params);
     }
 
+    /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
+     * @throws MissingParameterException
+     */
     public function upsert(Album $album): void
     {
         $this->client->update([

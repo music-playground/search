@@ -10,7 +10,7 @@ class ShortArtist
         private readonly ?string $id,
         private string $name,
         private readonly IdSource $source,
-        private string $avatarId
+        private ?string $avatarId
     ) {
     }
 

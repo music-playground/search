@@ -2,8 +2,6 @@
 
 namespace App\Search\Domain\Entity;
 
-use InvalidArgumentException;
-
 class Album
 {
     private bool $isFull = true;

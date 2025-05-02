@@ -1,6 +1,7 @@
 services:
   elastic:
     image: elasticsearch:8.18.0
+    user: "1000:1000"
     profiles:
       - service
     ports:
@@ -10,16 +11,8 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - xpack.security.enrollment.enabled=false
-    networks:
-      - elastic
-  kibana:
-    image: kibana:8.18.0
-    profiles:
-      - service
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elastic:9200
-    ports:
-      - 5601:5601
+    volumes:
+      - /.docker-data/mp/search/elasticsearch:/usr/share/elasticsearch/data
     networks:
       - elastic
   search:
@@ -40,6 +33,42 @@ services:
     ports:
       - 8090:8000
     entrypoint: ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+  search-worker-artists:
+    profiles:
+      - workers
+    extends:
+      service: search
+    command: >
+      php bin/console messenger:consume amqp 
+      --queues=artists.on_update_full.1
+      --queues=artists.on_update_full.2
+      --queues=artists.on_update_full.3
+      --queues=artists.on_update_full.4
+      --bus=handle.bus -vv -f 10
+  search-worker-albums:
+    profiles:
+      - workers
+    extends:
+      service: search
+    command: >
+      php bin/console messenger:consume amqp 
+      --queues=albums.on_update_full.1
+      --queues=albums.on_update_full.2
+      --queues=albums.on_update_full.3
+      --queues=albums.on_update_full.4
+      --bus=handle.bus -vv -f 10
+  search-worker-tracks:
+    profiles:
+      - workers
+    extends:
+      service: search
+    command: >
+      php bin/console messenger:consume amqp 
+      --queues=tracks.on_update.1
+      --queues=tracks.on_update.2
+      --queues=tracks.on_update.3
+      --queues=tracks.on_update.4
+      --bus=handle.bus -vv -f 10
 networks:
   elastic:
     driver: bridge
