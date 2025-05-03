@@ -15,7 +15,7 @@ final readonly class AlbumRepository implements AlbumRepositoryInterface
     public function __construct(
         private Client $client,
         private AlbumMapping $mapping,
-        private string $index = 'albums'
+        private string $index
     ) {
     }
 
@@ -63,6 +63,53 @@ final readonly class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
+     */
+    public function search(?SearchAfter $searchAfter, string $text, int $count): array
+    {
+        $params = [
+            'index' => $this->index,
+            'body' => [
+                'size' => $count,
+                'query' => [
+                    'bool' => [
+                        'should' => [
+                            [
+                                'match' => [
+                                    'name' => ['query' => $text, 'boost' => 1.25]
+                                ]
+                            ],
+                            [
+                                'match' => [
+                                    'artists.name' => ['query' => $text]
+                                ]
+                            ],
+                            [
+                                'match' => [
+                                    'artists.name' => ['query' => $text, 'boost' => 0.5]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'sort' => [
+                    ['_score' => 'desc'],
+                    ['id' => 'desc']
+                ]
+            ],
+        ];
+
+        if ($searchAfter !== null) {
+            $params['body']['search_after'] = [$searchAfter->score, $searchAfter->id];
+        }
+
+        $response = $this->client->search($params)->asArray();
+
+        return $this->mapSearchResponse($response);
+    }
+
+    /**
      * @throws ClientResponseException
      * @throws ServerResponseException
      */
@@ -103,5 +150,21 @@ final readonly class AlbumRepository implements AlbumRepositoryInterface
                'doc_as_upsert' => true
            ]
         ]);
+    }
+
+    private function mapSearchResponse(array $data): array
+    {
+        return [
+            'count' => $data['hits']['total']['value'],
+            'items' => array_map(function (array $item) {
+                $album = $item['_source'];
+
+                return [
+                    'score' => $item['_score'],
+                    ...array_diff_key($album, ['full' => 1, 'tracks' => 1]),
+                    'artists' => array_map(fn (array $artist) => array_diff_key($artist, ['source' => 1]), $album['artists']),
+                ];
+            }, $data['hits']['hits'])
+        ];
     }
 }

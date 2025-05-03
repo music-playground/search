@@ -1,4 +1,8 @@
 parameters:
+    albumsIndexName: albums
+    artistsIndexName: artists
+    maxPaginationCount: 100
+    maxQLength: 100
 
 services:
     _defaults:
@@ -23,7 +27,19 @@ services:
     App\Search\Infrastructure\Repository\ArtistRepository:
         arguments:
             $client: '@elasticsearch.client'
+            $index: '%artistsIndexName%'
 
     App\Search\Infrastructure\Repository\AlbumRepository:
         arguments:
             $client: '@elasticsearch.client'
+            $index: '%albumsIndexName%'
+
+    App\Search\Infrastructure\Controller\AlbumController:
+        arguments:
+            $maxQLength: '%maxQLength%'
+            $maxCount: '%maxPaginationCount%'
+
+    App\Search\Infrastructure\Controller\ArtistController:
+        arguments:
+            $maxQLength: '%maxQLength%'
+            $maxCount: '%maxPaginationCount%'

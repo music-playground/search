@@ -1,1 +1,5 @@
 controllers:
+    resource:
+      path: ../src/Search/Infrastructure/Controller
+      namespace: App\Search\Infrastructure\Controller
+    type: attribute
