@@ -2,12 +2,8 @@
 
 namespace App\Search\Domain\Repository;
 
-use App\Search\Domain\Entity\Artist;
-
-interface ArtistRepositoryInterface
+interface CollectionRepositoryInterface
 {
-    public function upsert(Artist $artist): void;
-
     //TODO: Do typing instead of array
     public function search(?SearchAfter $searchAfter, string $text, int $count): array;
 }

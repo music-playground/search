@@ -16,7 +16,7 @@ class Album
     public function __construct(private readonly string $id) {
     }
 
-    public function setFull(string $name, string $coverId): void {
+    public function setFull(string $name, ?string $coverId): void {
         $this->name = $name;
         $this->coverId = $coverId;
         $this->isFull = true;

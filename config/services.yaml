@@ -1,6 +1,7 @@
 parameters:
-    albumsIndexName: albums
+    albumsIndexName: albums1
     artistsIndexName: artists
+    playlistsIndexName: playlists
     maxPaginationCount: 100
     maxQLength: 100
 
@@ -33,8 +34,20 @@ services:
         arguments:
             $client: '@elasticsearch.client'
             $index: '%albumsIndexName%'
+    App\Search\Infrastructure\Repository\PlaylistRepository:
+        arguments:
+            $client: '@elasticsearch.client'
+            $index: '%playlistsIndexName%'
+    App\Search\Infrastructure\Repository\CollectionRepository:
+        arguments:
+            $client: '@elasticsearch.client'
+            $albumIndex: '%albumsIndexName%'
+            $playlistIndex: '%playlistsIndexName%'
+            $fileHost: '%env(FILE_SERVICE_HOST)%'
+            $albumFileDomain: 'album-cover'
+            $playlistFileDomain: 'playlist-cover'
 
-    App\Search\Infrastructure\Controller\AlbumController:
+    App\Search\Infrastructure\Controller\CollectionController:
         arguments:
             $maxQLength: '%maxQLength%'
             $maxCount: '%maxPaginationCount%'

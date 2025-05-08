@@ -2,20 +2,20 @@
 
 namespace App\Search\Infrastructure\Controller;
 
-use App\Search\Domain\Repository\AlbumRepositoryInterface;
+use App\Search\Domain\Repository\CollectionRepositoryInterface;
 use App\Search\Infrastructure\Controller\Trait\ValidationTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/v1/albums')]
-class AlbumController extends AbstractController
+#[Route('/api/v1/collections')]
+class CollectionController extends AbstractController
 {
     use ValidationTrait;
 
     public function __construct(
-        private readonly AlbumRepositoryInterface $repository,
+        private readonly CollectionRepositoryInterface $repository,
         private readonly int $maxQLength,
         private readonly int $maxCount
     ) {

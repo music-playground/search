@@ -17,6 +17,25 @@ class Artist
         $this->setGenres($genres);
     }
 
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setAvatarId(string $id): void
+    {
+        $this->avatarId = $id;
+    }
+
+    public function setGenres(array $genres): void
+    {
+        if (array_unique($this->genres) !== $this->genres) {
+            throw new InvalidArgumentException('Genres has duplicated');
+        }
+
+        $this->genres = $genres;
+    }
+
     public function getId(): ?string
     {
         return $this->id;
@@ -27,32 +46,13 @@ class Artist
         return $this->name;
     }
 
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
     public function getAvatarId(): string
     {
         return $this->avatarId;
     }
 
-    public function setAvatarId(string $id): void
-    {
-        $this->avatarId = $id;
-    }
-
     public function getGenres(): array
     {
         return $this->genres;
-    }
-
-    public function setGenres(array $genres): void
-    {
-        if (array_unique($this->genres) !== $this->genres) {
-            throw new InvalidArgumentException('Genres has duplicated');
-        }
-
-        $this->genres = $genres;
     }
 }

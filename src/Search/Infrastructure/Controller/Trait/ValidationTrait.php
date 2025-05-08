@@ -2,7 +2,7 @@
 
 namespace App\Search\Infrastructure\Controller\Trait;
 
-use App\Search\Infrastructure\Repository\SearchAfter;
+use App\Search\Domain\Repository\SearchAfter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 trait ValidationTrait

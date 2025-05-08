@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Search\Infrastructure\Repository;
+namespace App\Search\Domain\Repository;
 
 final readonly class SearchAfter
 {

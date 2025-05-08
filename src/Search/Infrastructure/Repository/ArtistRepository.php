@@ -4,6 +4,7 @@ namespace App\Search\Infrastructure\Repository;
 
 use App\Search\Domain\Entity\Artist;
 use App\Search\Domain\Repository\ArtistRepositoryInterface;
+use App\Search\Domain\Repository\SearchAfter;
 use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
